@@ -20,27 +20,29 @@ va = new Ext.Application({
             ]
         });
 
+        this.data.restaurants = new Ext.data.Store({
+            model: va.data.Business,
+            autoLoad: true,
+            proxy: {
+                type: 'scripttag',
+                url: 'http://api.yelp.com/business_review_search' +
+                    '?ywsid=' + YELP_KEY +
+                    '&term=' + 'Bars' +
+                    '&location=Silicon%20Valley',
+                reader: {
+                    type: 'json',
+                    root: 'businesses'
+                }
+            }
+        });
+
         this.listCardToolbar = new Ext.Toolbar({
             dock: 'top',
             title: 'Valley Guide'
         });
 
         this.listCardDataList = new Ext.List({
-            store: new Ext.data.Store({
-                model: va.data.Business,
-                autoLoad: true,
-                proxy: {
-                    type: 'scripttag',
-                    url: 'http://api.yelp.com/business_review_search' +
-                        '?ywsid=' + YELP_KEY +
-                        '&term=' + 'Bars' +
-                        '&location=Silicon%20Valley',
-                    reader: {
-                        type: 'json',
-                        root: 'businesses'
-                    }
-                }
-            }),
+            store: this.data.restaurants,
             itemTpl:
                 '<img class="photo" src="http://src.sencha.io/40/{photo_url}" width="40" height="40"/>' +
                 '{name}<br/>' +
